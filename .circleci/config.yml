@@ -1,0 +1,21 @@
+version 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10.2
+    working_directory: ~/workspace
+    steps:
+      -checkout
+
+      - restore_cache:
+        keys:
+          -vl-dependencies-{{ checksum "package.json" }}
+          -vl-dependencies-
+      - run: npm install
+
+      - save_cache:
+        paths:
+          - node_modules
+        key: vl-dependencies-{{ checksum "package.json" }}
+
+      - run: yarn test
