@@ -1,7 +1,10 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const ACCESS_TOKEN = PropertiesService.getScriptProperties().getProperty("LINE_API_TOKEN");
 const baseURL = "https://api.line.me/v2/bot/";
+function readCSS(filename) {
+    let css = HtmlService.createHtmlOutputFromFile(filename).getContent;
+    return css;
+}
 function doGet() {
     let html = HtmlService.createTemplateFromFile("index");
     return html.evaluate();
@@ -12,6 +15,8 @@ function getData(alg) {
     }
     else if (alg == "body") {
         return "これはHTMLページの本文に表示するテキストです";
+    }
+    else if (alg == "form") {
     }
 }
 function doPost(e) {
