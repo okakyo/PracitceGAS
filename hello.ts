@@ -1,10 +1,12 @@
+
 const  ACCESS_TOKEN:string|null = PropertiesService.getScriptProperties().getProperty("LINE_API_TOKEN");
 const baseURL:string="https://api.line.me/v2/bot/"
+
 function doGet() {
     let  html = HtmlService.createTemplateFromFile("index");   
     return html.evaluate();
 }
-   
+
 function getData(alg:string){
     if(alg == "title"){
       return "Hello!";
@@ -23,21 +25,31 @@ function doPost(e:any) {
     // ユーザーのメッセージを取得
     var userMessage:string = JSON.parse(e.postData.contents).events[0].message.text;
     // 応答メッセージ用のAPI URL
-    var url:string = 'message/reply';
+    var url:string = baseURL+'message/reply';
   
-    UrlFetchApp.fetch(url, {
+    interface beforeHeaders{
+      'headers':{[keys:string]:string},
+      'method':any,
+      'payload':{[key:string]:string}
+    }
+    
+    const Headers:beforeHeaders={
       'headers': {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ' + ACCESS_TOKEN,
       },
-      'method': 'post',
-      'payload': JSON.stringify({
-        'replyToken': replyToken,
-        'messages': [{
+      'method': "post",
+      'payload':{
+        'replyToken':replyToken,
+        'message':JSON.stringify({
           'type': 'text',
-          'text': userMessage + 'ンゴ',
-        }],
-      }),
-      });
+          'text': userMessage + 'ンゴ', 
+        })
+      }
+    }
+    
+
+
+    UrlFetchApp.fetch(url, Headers);
     return ContentService.createTextOutput(JSON.stringify({'content': 'post ok'})).setMimeType(ContentService.MimeType.JSON);
   }
