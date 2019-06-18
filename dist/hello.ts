@@ -29,16 +29,10 @@ function doGet(e:any) {
     return HtmlService.createTemplateFromFile(html).evaluate();
 }
 
-function getData(alg:string){
-    if(alg == "title"){
-      return "Hello!";
-    }
-    else if(alg == "body"){
-      return "これはHTMLページの本文に表示するテキストです";
-    }
-    else if(alg=="form"){
-        return 
-    }
-}
- 
+ function SheetGetter(){
+   let Schemas:string[]=['日付','タグ名','費用']
+   let sheet=SpreadsheetApp.getActiveSheet()
+   
+   return 
+ }
 
