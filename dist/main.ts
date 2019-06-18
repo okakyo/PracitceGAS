@@ -6,8 +6,6 @@
 */
 
 
-const  ACCESS_TOKEN:string|null = PropertiesService.getScriptProperties().getProperty("LINE_API_TOKEN");
-const baseURL:string="https://api.line.me/v2/bot/"
 
 // スプレッドシートのデータよりチャートを生成する。
 function createChart(){
@@ -19,8 +17,9 @@ function readCSS(filename:string){
   let css=HtmlService.createHtmlOutputFromFile(filename).getContent;
   return css;
 }
-
+// Web アプリを 公開する。
 function doGet(e:any) {
+
     let  page=e.parameter["p"];
     let html="index"
     switch(page){
@@ -29,10 +28,26 @@ function doGet(e:any) {
     return HtmlService.createTemplateFromFile(html).evaluate();
 }
 
- function SheetGetter(){
-   let Schemas:string[]=['日付','タグ名','費用']
-   let sheet=SpreadsheetApp.getActiveSheet()
-   
-   return 
- }
+
+class SheetChecker{
+  constructor(){
+    let parentSheet = SpreadsheetApp.openById('111La6bs-lKZpGg_jhH7ynVXAfGGsL-0XcEqvwcPZl_w');
+  }
+
+  getData(id=null){
+    if (id==null){}
+    else{
+      return 
+    }
+  }
+  postData(){
+
+  }
+  updateData(){
+
+  }
+  removeData(){
+
+  }
+}
 
