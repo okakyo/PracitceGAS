@@ -23,7 +23,10 @@ function doGet(e:any) {
     let  page=e.parameter["p"];
     let html="index"
     switch(page){
-      case null : html="index";
+      case null : html="index"
+      case "read": html="read"
+      case "update": html="update"
+  
     }
     return HtmlService.createTemplateFromFile(html).evaluate();
 }
