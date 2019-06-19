@@ -30,29 +30,27 @@ function doGet(e:any) {
     return HtmlService.createTemplateFromFile(html).evaluate();
 }
 
-
+// スプレッドシートを読み込み 
 class SheetChecker{
     parentSheet = SpreadsheetApp.openById('111La6bs-lKZpGg_jhH7ynVXAfGGsL-0XcEqvwcPZl_w');
     sheet=this.parentSheet.getSheets()[0];
     lastRow=this.sheet.getLastRow()
 
-  getData(id=null){
-    if (id==null){
-      return this.sheet.getRange(1,1,5,)
+  getData(id:number=null){
+    if (id===null){
+      return this.sheet.getDataRange().getValues()
     }
     else{
       return this.sheet.getRange(id,1,id).getValues()
-      
     }
-    
   }
-  postData(inputdata){
-
-    this.sheet.appendRow([])
+  postData(inputdata:string[]){
+    this.sheet.appendRow(inputdata)
   }
-  updateData(col){
+  updateData(row:number,col:number,value:string){
+    this.sheet.getRange(row,col).setValue(value)
   }
-  removeData(col){
+  removeData(col:number){
     this.sheet.deleteRow(col);
   }
 }
