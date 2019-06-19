@@ -26,31 +26,34 @@ function doGet(e:any) {
       case null : html="index"
       case "read": html="read"
       case "update": html="update"
-  
     }
     return HtmlService.createTemplateFromFile(html).evaluate();
 }
 
 
 class SheetChecker{
-  constructor(){
-    let parentSheet = SpreadsheetApp.openById('111La6bs-lKZpGg_jhH7ynVXAfGGsL-0XcEqvwcPZl_w');
-  }
+    parentSheet = SpreadsheetApp.openById('111La6bs-lKZpGg_jhH7ynVXAfGGsL-0XcEqvwcPZl_w');
+    sheet=this.parentSheet.getSheets()[0];
+    lastRow=this.sheet.getLastRow()
 
   getData(id=null){
-    if (id==null){}
-    else{
-      return 
+    if (id==null){
+      return this.sheet.getRange(1,1,5,)
     }
+    else{
+      return this.sheet.getRange(id,1,id).getValues()
+      
+    }
+    
   }
-  postData(){
+  postData(inputdata){
 
+    this.sheet.appendRow([])
   }
-  updateData(){
-
+  updateData(col){
   }
-  removeData(){
-
+  removeData(col){
+    this.sheet.deleteRow(col);
   }
 }
 
