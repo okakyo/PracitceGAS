@@ -30,13 +30,13 @@ function doGet(e:any) {
     return HtmlService.createTemplateFromFile(html).evaluate();
 }
 
-// スプレッドシートを読み込み 
+// スプレッドシートを読み込み
 class SheetChecker{
     parentSheet = SpreadsheetApp.openById('111La6bs-lKZpGg_jhH7ynVXAfGGsL-0XcEqvwcPZl_w');
     sheet=this.parentSheet.getSheets()[0];
     lastRow=this.sheet.getLastRow()
 
-  getData(id:number=null){
+  getSheetData(id:number=null){
     if (id===null){
       return this.sheet.getDataRange().getValues()
     }
@@ -44,13 +44,13 @@ class SheetChecker{
       return this.sheet.getRange(id,1,id).getValues()
     }
   }
-  postData(inputdata:string[]){
+  postSheetData(inputdata:string[]){
     this.sheet.appendRow(inputdata)
   }
-  updateData(row:number,col:number,value:string){
+  updateSheetData(row:number,col:number,value:string){
     this.sheet.getRange(row,col).setValue(value)
   }
-  removeData(col:number){
+  removeSheetData(col:number){
     this.sheet.deleteRow(col);
   }
 }
