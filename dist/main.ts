@@ -7,12 +7,6 @@
 
 
 
-// スプレッドシートのデータよりチャートを生成する。
-function createChart(){
-  return 
-
-}
-
 function readCSS(filename:string){
   let css=HtmlService.createHtmlOutputFromFile(filename).getContent;
   return css;
@@ -26,22 +20,18 @@ function doGet(e:any) {
     let GetDataFromSheet=Sheet.getSheetData();
     GetDataFromSheet.shift();
     for(let  i in GetDataFromSheet){
-      let date=new Date(GetDataFromSheet[i][0])
-      GetDataFromSheet[i][0]=[
-        date.getFullYear(),
-        date.getMonth() + 1,
-        date.getDate()
-        ].join('/') 
+      GetDataFromSheet[i][0]=Utilities.formatDate(new Date(GetDataFromSheet[i][0]),'Asia/Tokyo','yyyy/MM/dd')
     }
     let template=HtmlService.createTemplateFromFile(html);
     template.data=GetDataFromSheet;
 
     Logger.log(GetDataFromSheet);
-    return template.evaluate();
+    return template.evaluate().setTitle('家計簿アプリ');;
 }
 function PostData(e:any,sheet:any){
-  let inputData=[new Date(),e.parameter.tagName,e.parameter.checkCharge,e.parameter.amount,e.parameter.note]
+  let inputData=[Utilities.formatDate(new Date(),'Asia/Tokyo','yyyy/MM/dd'),e.parameter.tagName,e.parameter.checkCharge,e.parameter.amount,e.parameter.note]
   sheet.postSheetData(inputData);
+  
 }
 
 // スプレッドシートを読み込み
@@ -52,6 +42,7 @@ class SheetChecker{
 
   getSheetData(id:number=null){
     if (id===null){
+      // 日付だけで取れるようにしたほうがいい。
       let Data=this.sheet.getDataRange().getValues()
       return Data;
     }
