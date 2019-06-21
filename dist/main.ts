@@ -19,15 +19,29 @@ function readCSS(filename:string){
 }
 // Web アプリを 公開する。
 function doGet(e:any) {
+    let Sheet=new SheetChecker();
 
     let  page=e.parameter["p"];
     let html="index"
-    switch(page){
-      case null : html="index"
-      case "read": html="read"
-      case "update": html="update"
+    let GetDataFromSheet=Sheet.getSheetData();
+    GetDataFromSheet.shift();
+    for(let  i in GetDataFromSheet){
+      let date=new Date(GetDataFromSheet[i][0])
+      GetDataFromSheet[i][0]=[
+        date.getFullYear(),
+        date.getMonth() + 1,
+        date.getDate()
+        ].join('/') 
     }
-    return HtmlService.createTemplateFromFile(html).evaluate();
+    let template=HtmlService.createTemplateFromFile(html);
+    template.data=GetDataFromSheet;
+
+    Logger.log(GetDataFromSheet);
+    return template.evaluate();
+}
+function PostData(e,sheet){
+  let inputData=[new Date(),e.parameter.tagName,e.parameter.checkCharge,e.parameter.amount,e.parameter.note]
+  sheet.postSheetData(inputData);
 }
 
 // スプレッドシートを読み込み
@@ -38,20 +52,21 @@ class SheetChecker{
 
   getSheetData(id:number=null){
     if (id===null){
-      return this.sheet.getDataRange().getValues()
+      let Data=this.sheet.getDataRange().getValues()
+      return Data;
     }
     else{
       return this.sheet.getRange(id,1,id).getValues()
     }
   }
   postSheetData(inputdata:string[]){
-    this.sheet.appendRow(inputdata)
+    return this.sheet.appendRow(inputdata)
   }
   updateSheetData(row:number,col:number,value:string){
-    this.sheet.getRange(row,col).setValue(value)
+    return this.sheet.getRange(row,col).setValue(value)
   }
   removeSheetData(col:number){
-    this.sheet.deleteRow(col);
+    return this.sheet.deleteRow(col);
   }
 }
 
