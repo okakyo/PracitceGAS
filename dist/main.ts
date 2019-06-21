@@ -39,7 +39,7 @@ function doGet(e:any) {
     Logger.log(GetDataFromSheet);
     return template.evaluate();
 }
-function PostData(e,sheet){
+function PostData(e:any,sheet:any){
   let inputData=[new Date(),e.parameter.tagName,e.parameter.checkCharge,e.parameter.amount,e.parameter.note]
   sheet.postSheetData(inputData);
 }
@@ -69,4 +69,3 @@ class SheetChecker{
     return this.sheet.deleteRow(col);
   }
 }
-
