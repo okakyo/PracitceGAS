@@ -42,17 +42,12 @@ class SheetChecker{
 
   getSheetData(id:number=null){
     if (id===null){
-      var ans=[]
+      //var ans=[]
       // 日付だけで取れるようにしたほうがいい。
       let getData=this.sheet.getDataRange().getValues()
       Logger.log(getData[1][0]);
-      for(var i=getData.length; i =>1; i--){
-        if(new Date(getData[0][i])!==new Date()){
-          ans.push(getData[i])}
-        else
-          break
-      }
-      return ans;
+      
+      return getData;
     }
     else{
       return this.sheet.getRange(id,1,id).getValues()
