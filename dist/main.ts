@@ -18,7 +18,6 @@ function doGet(e:any) {
     let  page=e.parameter["p"];
     let html="index"
     let GetDataFromSheet=Sheet.getSheetData();
-    GetDataFromSheet.shift();
     for(let  i in GetDataFromSheet){
       GetDataFromSheet[i][0]=Utilities.formatDate(new Date(GetDataFromSheet[i][0]),'Asia/Tokyo','yyyy/MM/dd')
     }
@@ -26,7 +25,9 @@ function doGet(e:any) {
     template.data=GetDataFromSheet;
 
     Logger.log(GetDataFromSheet);
-    return template.evaluate().setTitle('家計簿アプリ');;
+    return template.evaluate()
+            .setTitle('家計簿アプリ')
+            .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }
 function PostData(e:any,sheet:any){
   let inputData=[Utilities.formatDate(new Date(),'Asia/Tokyo','yyyy/MM/dd'),e.parameter.tagName,e.parameter.checkCharge,e.parameter.amount,e.parameter.note]
@@ -42,12 +43,17 @@ class SheetChecker{
 
   getSheetData(id:number=null){
     if (id===null){
-      //var ans=[]
+      var ans=[]
       // 日付だけで取れるようにしたほうがいい。
       let getData=this.sheet.getDataRange().getValues()
-      Logger.log(getData[1][0]);
+      for(var i=getData.length-1;i >1; i--){
+        if(Utilities.formatDate(new Date(getData[i][0]),'Asia/Tokyo','yyyy/MM/dd')===Utilities.formatDate(new Date(),'Asia/Tokyo','yyyy/MM/dd')){
+          ans.push(getData[i])
+        }
+      }
+      Logger.log(ans);
       
-      return getData;
+      return ans;
     }
     else{
       return this.sheet.getRange(id,1,id).getValues()
