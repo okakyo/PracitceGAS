@@ -8,7 +8,7 @@
 
 
 function readCSS(filename:string){
-  let css=HtmlService.createHtmlOutputFromFile(filename).getContent;
+  let css=HtmlService.createHtmlOutputFromFile(filename).getContent();
   return css;
 }
 // Web アプリを 公開する。
