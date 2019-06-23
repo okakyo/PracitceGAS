@@ -5,7 +5,7 @@
   ・スプレッドシートに記入され、Webアプリから今週の利用状況を可視化できるアプリを作る。
 */
 
-
+var url=""
 
 function readCSS(filename:string){
   let css=HtmlService.createHtmlOutputFromFile(filename).getContent();
@@ -30,11 +30,10 @@ function doGet(e:any) {
 }
 function doPost(e:any){
   let sheet=new SheetChecker()
-  let inputData=[Utilities.formatDate(new Date(),'Asia/Tokyo','yyyy/MM/dd'),e.parameter.tagName,e.parameter.checkCharge,e.parameter.amount,e.parameter.note]
+  let lastRow=sheet.getLastRow()
+  let inputData=[Utilities.formatDate(new Date(),'Asia/Tokyo','yyyy/MM/dd'),e.parameter.tagName,e.parameter.checkCharge,e.parameter.amount,e.parameter.note,lastRow]
   sheet.postSheetData(inputData);
-  return HtmlService.createTemplateFromFile("index").evaluate()
-        .setTitle('家計簿アプリ')
-        .addMetaTag('viewport', 'width=device-width, initial-scale=1');
+  return doGet(e)
 }
 
 function deleteData(id:number){
@@ -52,6 +51,9 @@ class SheetChecker{
     sheet=this.parentSheet.getSheets()[0];
     lastRow=this.sheet.getLastRow()
 
+  getLastRow(){
+    return this.lastRow
+  }
   getSheetData(id:number=null){
     if (id===null){
       var ans=[]
