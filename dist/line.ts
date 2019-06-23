@@ -2,7 +2,7 @@
 const  ACCESS_TOKEN:string|null = PropertiesService.getScriptProperties().getProperty("LINE_API_TOKEN");
 const baseURL:string="https://api.line.me/v2/bot/"
 
-function doPost(e:any) {
+function LINEPost(e:any) {
     // WebHookで受信した応答用Token
     var replyToken:string = JSON.parse(e.postData.contents).events[0].replyToken;
     // ユーザーのメッセージを取得

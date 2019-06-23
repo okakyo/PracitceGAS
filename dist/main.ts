@@ -23,16 +23,27 @@ function doGet(e:any) {
     }
     let template=HtmlService.createTemplateFromFile(html);
     template.data=GetDataFromSheet;
-
     Logger.log(GetDataFromSheet);
     return template.evaluate()
             .setTitle('家計簿アプリ')
             .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }
-function PostData(e:any,sheet:any){
+function doPost(e:any){
+  let sheet=new SheetChecker()
   let inputData=[Utilities.formatDate(new Date(),'Asia/Tokyo','yyyy/MM/dd'),e.parameter.tagName,e.parameter.checkCharge,e.parameter.amount,e.parameter.note]
   sheet.postSheetData(inputData);
-  
+  return HtmlService.createTemplateFromFile("index").evaluate()
+        .setTitle('家計簿アプリ')
+        .addMetaTag('viewport', 'width=device-width, initial-scale=1');
+}
+
+function deleteData(id:number){
+  let data=new SheetChecker();
+  data.deleteSheetData(id);
+  return HtmlService.createTemplateFromFile("index").evaluate()
+      .setTitle('家計簿アプリ')
+      .addMetaTag('viewport', 'width=device-width, initial-scale=1');
+    
 }
 
 // スプレッドシートを読み込み
@@ -46,7 +57,7 @@ class SheetChecker{
       var ans=[]
       // 日付だけで取れるようにしたほうがいい。
       let getData=this.sheet.getDataRange().getValues()
-      for(var i=getData.length-1;i >1; i--){
+      for(var i=getData.length-1;i >=0; i--){
         if(Utilities.formatDate(new Date(getData[i][0]),'Asia/Tokyo','yyyy/MM/dd')===Utilities.formatDate(new Date(),'Asia/Tokyo','yyyy/MM/dd')){
           ans.push(getData[i])
         }
@@ -65,7 +76,7 @@ class SheetChecker{
   updateSheetData(row:number,col:number,value:string){
     return this.sheet.getRange(row,col).setValue(value)
   }
-  removeSheetData(col:number){
+  deleteSheetData(col:number){
     return this.sheet.deleteRow(col);
   }
 }
